@@ -11,9 +11,11 @@ on init
     symlink /system/etc /etc
 
     mkdir /sdcard
+    mkdir /emmc
     mkdir /preload
     mkdir /system
     mkdir /data
+    mkdir /datadata
     mkdir /cache
     mkdir /efs
     mkdir /tmp
@@ -76,13 +78,19 @@ on boot
 service ueventd /sbin/ueventd
     critical
 
-service console /system/bin/sh
+service console /sbin/sh
     console
 
 service recovery /sbin/recovery
 
 service adbd /sbin/adbd recovery
 #	disabled
+
+service tvout /system/bin/tvoutserver
+    disabled
+
+service memsicd /system/bin/memsicd
+    disabled
 
 on property:persist.service.adb.enable=1
     start adbd
