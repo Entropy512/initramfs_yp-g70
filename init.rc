@@ -121,6 +121,7 @@ loglevel 3
 on fs
 # mount mtd partitions
     # Mount /system rw first to give the filesystem a chance to save a checkpoint
+    mount ext4 /dev/block/mmcblk0p13 /system wait rw
     mount rfs /dev/block/mmcblk0p13 /system check=no
 
     # Temp add for FY -> GB update problem 
@@ -134,6 +135,7 @@ on fs
 		
     exec umount
     
+    mount ext4 /dev/block/mmcblk0p13 /system wait ro
     mount rfs /dev/block/mmcblk0p13 /system check=no
     mount rfs /dev/block/mmcblk0p13 /system ro remount
 
@@ -153,15 +155,17 @@ on fs
 
     mkdir /data
 # SEC_DMCRYPT crypt flag added data
-    # mount rfs /dev/block/mmcblk0p16 /data nosuid nodev check=no
-    mount rfs /dev/block/mmcblk0p16 /data nosuid nodev crypt check=no
+    mount ext4 /dev/block/mmcblk0p16 /data nosuid nodev noatime wait crypt discard,noauto_da_alloc,journal_checksum
+    mount rfs /dev/block/mmcblk0p16 /data nosuid nodev check=no
+    #mount rfs /dev/block/mmcblk0p16 /data nosuid nodev crypt check=no
     chown system system /data
     chmod 0771 /data    
 
     mkdir /dbdata
   #SEC_DMCRYPT crypt flag added
-    mount rfs /dev/block/mmcblk0p14 /dbdata nosuid nodev crypt check=no
-    #mount rfs /dev/block/mmcblk0p14 /dbdata nosuid nodev check=no
+    mount ext4 /dev/block/mmcblk0p14 /dbdata nosuid nodev noatime wait crypt discard,noauto_da_alloc,journal_checksum
+    #mount rfs /dev/block/mmcblk0p14 /dbdata nosuid nodev crypt check=no
+    mount rfs /dev/block/mmcblk0p14 /dbdata nosuid nodev check=no
     chown system system /dbdata
     chmod 0771 /dbdata
     chmod 0771 /dbdata
@@ -174,6 +178,7 @@ on fs
     mkdir /dbdata/db-journal
     chown system system /dbdata/db-journal
     chmod 0777 /dbdata/db-journal
+    mount ext4 /dev/block/mmcblk0p15 /cache nosuid nodev noatime wait
     mount rfs /dev/block/mmcblk0p15 /cache nosuid nodev check=no
 
     mkdir /mnt/.lfs 0755 root root
