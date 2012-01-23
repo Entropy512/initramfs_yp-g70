@@ -724,7 +724,7 @@ service media /system/bin/mediaserver
     ioprio rt 4
 
 
-service samsungani /system/bin/samsungani
+service samsungani /vendor/scripts/bootanimation.sh
     user graphics
     group graphics
     disabled
@@ -825,3 +825,5 @@ service gpsd /system/vendor/bin/gpsd -c /system/vendor/etc/gps.xml
     user gps
     group system inet
 
+on property:sys.boot_completed=1
+    stop samsungani
